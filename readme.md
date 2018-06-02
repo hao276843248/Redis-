@@ -3,6 +3,8 @@
 * [Redis安装](#Redis安装)
 * [Redis配置](#Reids配置)
 * [服务端和客户端命令](#服务端和客户端命令)
+    * [服务器端](#服务器端)
+    * [客户端](#客户端)
 * [数据库操作](#数据库操作)
     * [数据类型](#数据类型)
         * [string](#string)
@@ -50,3 +52,156 @@
     >https://www.cnblogs.com/cloudshadow/p/mac_brew_install_redis.html
 
 # Reids配置
+## 配置
+* Redis的配置信息在/etc/redis/redis.conf下。
+* 查看
+    >sudo vi /etc/redis/redis.conf    
+## 配置详情
+* 绑定IP:如果需要远程访问，可将此⾏注释，或绑定⼀个真实ip
+    >bind 127.0.0.1
+* 端口，默认6379
+    >port 6379
+* 是否以守护进程运⾏
+    * 如果以守护进程运⾏，则不会在命令⾏阻塞，类似于服务
+    * 如果以⾮守护进程运⾏，则当前终端被阻塞
+    * 设置为yes表示守护进程，设置为no表示⾮守护进程
+    * 推荐设置为yes
+    >daemonize yes
+* 数据⽂件
+    >dbfilename dump.rdb
+* 数据文件存储路径
+    >dir /var/lib/redis
+* 日志文件
+    >logfile "/var/log/redis/redis-server.log"
+
+* 数据库个数，默认16个 0-15号
+    >database 16
+    #### 切换数据库
+    >select (库号)
+* 主从复制，类似于双机备份。
+    >slaveof
+
+# 服务端和客户端命令
+## 服务器端
+* 服务器端的命令 
+    >`redis-server`
+* help文档
+    >`redis-server --help`
+    ```
+    python@ubuntu:~$ redis-server --help
+    Usage: ./redis-server [/path/to/redis.conf] [options]
+        ./redis-server - (read config from stdin)
+        ./redis-server -v or --version
+        ./redis-server -h or --help
+        ./redis-server --test-memory <megabytes>
+
+    Examples:
+        ./redis-server (run the server with default conf)
+        ./redis-server /etc/redis/6379.conf
+        ./redis-server --port 7777
+        ./redis-server --port 7777 --slaveof 127.0.0.1 8888
+        ./redis-server /etc/myredis.conf --loglevel verbose
+
+    Sentinel mode:
+        ./redis-server /etc/sentinel.conf --sentinel
+    ```
+* 相关命令
+    >`ps aux | grep redis` 查看redis服务器进程
+    <br>`sudo kill -9 pid` 杀死redis服务器
+    <br>`sudo redis-server /etc/redis/redis.conf` 指定加载的配置文件
+## 客户端
+* 客户端的命令 
+    >`redis-cli`
+* 可以使⽤help查看帮助⽂档
+    >`redis-cli --help`
+    ```
+    python@ubuntu:~$ redis-cli --help
+    redis-cli 3.0.6
+
+    Usage: redis-cli [OPTIONS] [cmd [arg [arg ...]]]
+    -h <hostname>      Server hostname (default: 127.0.0.1).
+    -p <port>          Server port (default: 6379).
+    -s <socket>        Server socket (overrides hostname and port).
+    -a <password>      Password to use when connecting to the server.
+    -r <repeat>        Execute specified command N times.
+    -i <interval>      When -r is used, waits <interval> seconds per command.
+                        It is possible to specify sub-second times like -i 0.1.
+    -n <db>            Database number.
+    -x                 Read last argument from STDIN.
+    -d <delimiter>     Multi-bulk delimiter in for raw formatting (default: \n).
+    -c                 Enable cluster mode (follow -ASK and -MOVED redirections).
+    --raw              Use raw formatting for replies (default when STDOUT is
+                        not a tty).
+    --no-raw           Force formatted output even when STDOUT is not a tty.
+    --csv              Output in CSV format.
+    --stat             Print rolling stats about server: mem, clients, ...
+    --latency          Enter a special mode continuously sampling latency.
+    --latency-history  Like --latency but tracking latency changes over time.
+                        Default time interval is 15 sec. Change it using -i.
+    --latency-dist     Shows latency as a spectrum, requires xterm 256 colors.
+                        Default time interval is 1 sec. Change it using -i.
+    --lru-test <keys>  Simulate a cache workload with an 80-20 distribution.
+    --slave            Simulate a slave showing commands received from the master.
+    --rdb <filename>   Transfer an RDB dump from remote server to local file.
+    --pipe             Transfer raw Redis protocol from stdin to server.
+    --pipe-timeout <n> In --pipe mode, abort with error if after sending all data.
+                        no reply is received within <n> seconds.
+                        Default timeout: 30. Use 0 to wait forever.
+    --bigkeys          Sample Redis keys looking for big keys.
+    --scan             List all keys using the SCAN command.
+    --pattern <pat>    Useful with --scan to specify a SCAN pattern.
+    --intrinsic-latency <sec> Run a test to measure intrinsic system latency.
+                        The test will run for the specified amount of seconds.
+    --eval <file>      Send an EVAL command using the Lua script at <file>.
+    --help             Output this help and exit.
+    --version          Output version and exit.
+
+    Examples:
+    cat /etc/passwd | redis-cli -x set mypasswd
+    redis-cli get mypasswd
+    redis-cli -r 100 lpush mylist x
+    redis-cli -r 100 -i 1 info | grep used_memory_human:
+    redis-cli --eval myscript.lua key1 key2 , arg1 arg2 arg3
+    redis-cli --scan --pattern '*:12345*'
+
+    (Note: when using --eval the comma separates KEYS[] from ARGV[] items)
+
+    When no command is given, redis-cli starts in interactive mode.
+    Type "help" in interactive mode for information on available commands.
+
+    ```
+* 连接redis
+    >`redis-cli`
+    ```
+    python@ubuntu:~$ redis-cli
+    127.0.0.1:6379>
+    ```
+* 运⾏测试命令
+    >`ping`
+    ```
+    127.0.0.1:6379> ping
+    PONG    
+    ```
+* 切换数据库
+    ```
+    数据库没有名称，默认有16个，通过0-15来标识，连接redis默认选择第一个数据库
+    ```
+    > `select` 10
+    ```
+    127.0.0.1:6379> select 10
+    OK
+    127.0.0.1:6379[10]>
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
