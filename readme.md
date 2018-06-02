@@ -19,6 +19,7 @@
 * [搭建集群](#搭建集群)
 
 # Redis安装
+
 * ## step1:下载
     >wget http://download.redis.io/releases/redis-4.0.9.tar.gz
 * ## step2:解压
@@ -52,6 +53,7 @@
     >https://www.cnblogs.com/cloudshadow/p/mac_brew_install_redis.html
 
 # Reids配置
+
 ## 配置
 * Redis的配置信息在/etc/redis/redis.conf下。
 * 查看
@@ -82,6 +84,7 @@
     >slaveof
 
 # 服务端和客户端命令
+
 ## 服务器端
 * 服务器端的命令 
     >`redis-server`
