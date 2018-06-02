@@ -1,7 +1,7 @@
 # Reids
 ## 目录
-* [Redis安装](#Redis安装)
-* [Redis配置](#Reids配置)
+* [安装Redis](#安装Redis)
+* [配置Reids](#配置Reids)
 * [服务端和客户端命令](#服务端和客户端命令)
     * [服务器端](#服务器端)
     * [客户端](#客户端)
@@ -18,7 +18,7 @@
 * [搭建主从](#搭建主从)
 * [搭建集群](#搭建集群)
 
-# Redis安装
+# 安装Redis
 
 * ## step1:下载
     >wget http://download.redis.io/releases/redis-4.0.9.tar.gz
@@ -52,7 +52,7 @@
     * 使用 brew 安装 Redis
     >https://www.cnblogs.com/cloudshadow/p/mac_brew_install_redis.html
 
-# Reids配置
+# 配置Reids
 
 ## 配置
 * Redis的配置信息在/etc/redis/redis.conf下。
